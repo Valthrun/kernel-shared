@@ -9,13 +9,13 @@ pub use pattern::*;
 
 extern crate alloc;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct ModuleInfo {
     pub base_address: usize,
     pub module_size: usize,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct CS2ModuleInfo {
     pub process_id: i32,
 
