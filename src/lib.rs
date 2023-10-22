@@ -6,6 +6,11 @@ pub const KINTERFACE_MIN_VERSION: u32 = (0x00 << 24) | (0x02 << 16) | (0x01 << 8
 pub mod requests;
 
 mod pattern;
+use alloc::{
+    borrow::Cow,
+    string::String,
+};
+
 pub use pattern::*;
 
 extern crate alloc;
@@ -15,6 +20,13 @@ pub struct ModuleInfo {
     pub base_dll_name: [u8; 0xFF],
     pub base_address: usize,
     pub module_size: usize,
+}
+
+impl ModuleInfo {
+    pub fn base_dll_name(&self) -> Cow<'_, str> {
+        let name_length = self.base_dll_name.iter().position(|char| *char == 0);
+        String::from_utf8_lossy(&self.base_dll_name[0..name_length.unwrap_or(0)])
+    }
 }
 
 impl Default for ModuleInfo {
