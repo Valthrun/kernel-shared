@@ -1,7 +1,8 @@
 use crate::{
-    CS2ModuleInfo,
     KeyboardState,
+    ModuleInfo,
     MouseState,
+    ProcessModuleInfo,
     IO_MAX_DEREF_COUNT,
 };
 
@@ -37,11 +38,16 @@ impl DriverRequest for RequestHealthCheck {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct RequestCSModule;
+pub struct RequestCSModule {
+    /// Number of elements module_buffer can hold
+    pub module_buffer_length: usize,
+    pub module_buffer: *mut ModuleInfo,
+}
 
 #[derive(Debug, Clone, Copy)]
 pub enum ResponseCsModule {
-    Success(CS2ModuleInfo),
+    Success(ProcessModuleInfo),
+    BufferTooSmall { expected: usize },
     UbiquitousProcesses(usize),
     NoProcess,
 }

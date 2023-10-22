@@ -1,6 +1,7 @@
 #![no_std]
 
 pub const IO_MAX_DEREF_COUNT: usize = 31;
+pub const KINTERFACE_MIN_VERSION: u32 = (0x00 << 24) | (0x02 << 16) | (0x01 << 8) | (0x00 << 0);
 
 pub mod requests;
 
@@ -9,19 +10,27 @@ pub use pattern::*;
 
 extern crate alloc;
 
-#[derive(Debug, Default, Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ModuleInfo {
+    pub base_dll_name: [u8; 0xFF],
     pub base_address: usize,
     pub module_size: usize,
 }
 
-#[derive(Debug, Default, Clone, Copy)]
-pub struct CS2ModuleInfo {
-    pub process_id: i32,
+impl Default for ModuleInfo {
+    fn default() -> Self {
+        Self {
+            base_dll_name: [0u8; 0xFF],
+            base_address: Default::default(),
+            module_size: Default::default(),
+        }
+    }
+}
 
-    pub client: ModuleInfo,
-    pub engine: ModuleInfo,
-    pub schemasystem: ModuleInfo,
+#[derive(Debug, Default, Clone, Copy)]
+pub struct ProcessModuleInfo {
+    pub process_id: i32,
+    pub module_count: usize,
 }
 
 #[derive(Debug, Default)]
