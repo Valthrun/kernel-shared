@@ -45,19 +45,19 @@ pub struct RequestCSModule {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub enum ResponseCsModule {
+pub enum ResponseProcessModules {
     Success(ProcessModuleInfo),
     BufferTooSmall { expected: usize },
     UbiquitousProcesses(usize),
     NoProcess,
 }
-impl Default for ResponseCsModule {
+impl Default for ResponseProcessModules {
     fn default() -> Self {
         Self::NoProcess
     }
 }
 impl DriverRequest for RequestCSModule {
-    type Result = ResponseCsModule;
+    type Result = ResponseProcessModules;
 
     fn function_code() -> u16 {
         0x02
@@ -259,4 +259,26 @@ impl DriverRequest for RequestWrite {
     fn function_code() -> u16 {
         0x09
     }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct RequestProcessModules {
+    pub filter: ProcessFilter,
+
+    /// Number of elements module_buffer can hold
+    pub module_buffer_length: usize,
+    pub module_buffer: *mut ModuleInfo,
+}
+impl DriverRequest for RequestProcessModules {
+    type Result = ResponseProcessModules;
+
+    fn function_code() -> u16 {
+        0x0A
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum ProcessFilter {
+    Id { id: i32 },
+    Name { name: *const u8, name_length: usize },
 }
