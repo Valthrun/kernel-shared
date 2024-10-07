@@ -7,15 +7,7 @@ use crate::{
 };
 
 pub trait DriverRequest: Sized + Copy {
-    type Result: Sized + Copy + Default;
-
-    fn control_code() -> u32 {
-        (0x00000022 << 16) | // FILE_DEVICE_UNKNOWN
-        (0x00000000 << 14) | // FILE_SPECIAL_ACCESS
-        (0x00000001 << 13) | // Custom access code
-        ((Self::function_code() as u32 & 0x3FF) << 02) |
-        (0x00000003 << 00)
-    }
+    type Result: Send + Sync + Sized + Copy + Default;
 
     /// The 10 bit user function code for the request
     fn function_code() -> u16;
