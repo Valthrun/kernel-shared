@@ -2,6 +2,7 @@ use crate::{
     KeyboardState,
     ModuleInfo,
     MouseState,
+    ProcessId,
     ProcessModuleInfo,
     IO_MAX_DEREF_COUNT,
 };
@@ -71,7 +72,7 @@ pub enum MemoryAccessMode {
 
 #[derive(Debug, Clone, Copy)]
 pub struct RequestRead {
-    pub process_id: i32,
+    pub process_id: ProcessId,
     pub mode: MemoryAccessMode,
 
     pub offsets: [u64; IO_MAX_DEREF_COUNT],
@@ -225,7 +226,7 @@ impl DriverRequest for RequestReportSend {
 
 #[derive(Debug, Clone, Copy)]
 pub struct RequestWrite {
-    pub process_id: i32,
+    pub process_id: ProcessId,
     pub mode: MemoryAccessMode,
     pub address: usize,
 

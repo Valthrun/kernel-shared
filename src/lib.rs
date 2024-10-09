@@ -15,6 +15,8 @@ pub use pattern::*;
 
 extern crate alloc;
 
+pub type ProcessId = u32;
+
 #[derive(Debug, Clone, Copy)]
 pub struct ModuleInfo {
     pub base_dll_name: [u8; 0xFF],
@@ -41,7 +43,7 @@ impl Default for ModuleInfo {
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct ProcessModuleInfo {
-    pub process_id: i32,
+    pub process_id: ProcessId,
     pub module_count: usize,
 }
 
